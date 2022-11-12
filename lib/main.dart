@@ -13,6 +13,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Supplies',
       theme: ThemeData(
+        visualDensity: VisualDensity.adaptivePlatformDensity,
         primaryColor: const Color(0xEF007CFF),
       ),
       initialRoute: 'home',
