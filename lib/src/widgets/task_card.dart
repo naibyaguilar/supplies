@@ -10,7 +10,7 @@ class TaskCard extends StatelessWidget {
       child: Container(
           margin: const EdgeInsets.only(top: 10, bottom: 30),
           width: double.infinity,
-          height: 200,
+          height: 180,
           decoration: _cardBorders(),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -36,38 +36,55 @@ class TaskCard extends StatelessWidget {
                 child: const Padding(
                   padding: EdgeInsets.all(8.0),
                   child: Text(
-                    'Officia nulla ad mollit est ex sint anim aute.',
+                    'Ullamco ea est excepteur et ullamco.',
                     style: TextStyle(
-                        fontSize: 15,
-                        color: Colors.white,
-                        fontWeight: FontWeight.normal),
+                      fontSize: 15,
+                      color: Colors.white,
+                      fontWeight: FontWeight.normal,
+                    ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
               ),
-              const Padding(
-                padding: EdgeInsets.all(8.0),
-                child: Text(
-                  'Ullamco ea est excepteur reprehenderit eiusmod duis labore et ullamco.',
-                  style: TextStyle(
-                      fontSize: 20,
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  children: const [
+                    Icon(
+                      Icons.calendar_month_rounded,
                       color: Colors.white,
-                      fontWeight: FontWeight.normal),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
+                    ),
+                    Text(
+                      'Hacer antes de: HOY 15/11/2022',
+                      style: TextStyle(
+                        fontSize: 15,
+                        color: Colors.white,
+                        fontWeight: FontWeight.normal,
+                      ),
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ],
                 ),
               ),
-              const Padding(
-                padding: EdgeInsets.all(8.0),
-                child: Text(
-                  'Cillum sint excepteur esse ex nisi.',
-                  style: TextStyle(
-                      fontSize: 20,
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  children: const [
+                    Icon(
+                      Icons.sell,
                       color: Colors.white,
-                      fontWeight: FontWeight.normal),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
+                    ),
+                    Text(
+                      'Tipo: Inmobiliaria',
+                      style: TextStyle(
+                          fontSize: 15,
+                          color: Colors.white,
+                          fontWeight: FontWeight.normal),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ],
                 ),
               ),
             ],

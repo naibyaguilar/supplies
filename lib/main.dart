@@ -15,12 +15,15 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         visualDensity: VisualDensity.adaptivePlatformDensity,
         primaryColor: const Color(0xEF007CFF),
+        primaryColorDark: const Color(0xEF115DA9),
       ),
-      initialRoute: 'home',
+      initialRoute: 'login',
       routes: {
         'home': (_) => const HomeScreen(),
         'login': (_) => const LoginScreen(),
-        'register': (_) => const RegisterScreen()
+        'register': (_) => const RegisterScreen(),
+        'farm_admin': (_) => const FarmAdminScreen(),
+        'profile': (_) => const ProfileScreen()
       },
     );
   }

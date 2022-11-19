@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 // import 'package:provider/provider.dart';
 
 // import '../models/login_form_provider.dart';
-import '../ui/input_decorations.dart';
+import '../../ui/input_decorations.dart';
 
 class RegisterScreen extends StatelessWidget {
   const RegisterScreen({super.key});

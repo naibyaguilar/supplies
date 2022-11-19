@@ -8,12 +8,7 @@ class AppBarHome extends StatelessWidget {
     var screenSize = MediaQuery.of(context).size;
     // List _isHovering = [false, false];
 
-    return Container(
-      // decoration: BoxDecoration(
-      //     image: DecorationImage(
-      //   image: AssetImage('assets/images/wave.png'),
-      //   fit: BoxFit.fill,
-      // )),
+    return SizedBox(
       width: screenSize.width,
       height: screenSize.height * 0.15,
       child: Row(
@@ -21,7 +16,7 @@ class AppBarHome extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: InkWell(
-              onDoubleTap: () {},
+              onDoubleTap: () => Navigator.pushNamed(context, 'profile'),
               onTap: () {},
               child: const CircleAvatar(
                 radius: 35,
