@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 // import 'package:provider/provider.dart';
 
 // import 'package:supplies/src/models/models.dart';
 
+import '../../providers/providers.dart';
+import '../../service/service.dart';
 import '../../ui/input_decorations.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -25,8 +28,8 @@ class LoginScreen extends StatelessWidget {
                 fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 20),
-          // ignore: todo
-          const _LoginForm(), // *TODO: CREATE changeNotifierPRovider
+          ChangeNotifierProvider(
+              create: (_) => LoginFormProvider(), child: const _LoginForm()),
           const SizedBox(
             height: 50,
           ),
@@ -72,8 +75,9 @@ class _LoginForm extends StatelessWidget {
   const _LoginForm();
   @override
   Widget build(BuildContext context) {
-    // final loginForm = Provider.of<LoginFormProvider>(context);
+    final loginForm = Provider.of<LoginFormProvider>(context);
     return Form(
+      key: loginForm.formKey,
       autovalidateMode: AutovalidateMode.always,
       child: Padding(
         padding: const EdgeInsets.all(10.0),
@@ -86,7 +90,7 @@ class _LoginForm extends StatelessWidget {
                 hintText: 'john.doe@gmail.com',
                 labelText: 'Correo electrónico',
               ),
-              // onChanged: (value) => loginForm.email = value,
+              onChanged: (value) => loginForm.email = value,
               validator: (value) {
                 String pattern =
                     r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
@@ -105,7 +109,7 @@ class _LoginForm extends StatelessWidget {
                 hintText: '*********',
                 labelText: 'Contraseña',
               ),
-              // onChanged: (value) => loginForm.password = value,
+              onChanged: (value) => loginForm.password = value,
               validator: (value) {
                 return (value != null && value.length >= 6)
                     ? null
@@ -126,20 +130,30 @@ class _LoginForm extends StatelessWidget {
                   )),
             ),
             MaterialButton(
-              onPressed: () => Navigator.pushReplacementNamed(context, 'home'),
-              //loginForm.isLoading
-              //     ? null
-              //     : () async {
-              //         FocusScope.of(context).unfocus();
-              //         // final authService =
-              //         //     Provider.of<AuthService>(context, listen: false);
-              //         if (!loginForm.isValidForm()) return;
-              //         loginForm.isLoading = true;
+              // () => Navigator.pushReplacementNamed(context, 'home'),
+              onPressed: loginForm.isLoading
+                  ? null
+                  : () async {
+                      FocusScope.of(context).unfocus();
+                      final authService =
+                          Provider.of<AuthService>(context, listen: false);
+                      if (!loginForm.isValidForm()) return;
+                      loginForm.isLoading = true;
+                      // TODO: validar si el login es correcto
+                      final String? errorMessage = await authService.login(
+                          loginForm.email, loginForm.password);
 
-              //
-              // ignore: todo
-              //         // *TODO: validar si el login es correcto y pantallas de error
-              //       }
+                      if (errorMessage == null) {
+                        // ignore: use_build_context_synchronously
+                        Navigator.pushReplacementNamed(context, 'home');
+                      } else {
+                        // TODO: mostrar error en pantalla
+                        // print( errorMessage );
+                        NotificationsService.showSnackbar(
+                            errorMessage, context);
+                        loginForm.isLoading = false;
+                      }
+                    },
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10)),
               disabledColor: Colors.blueGrey,
@@ -148,9 +162,9 @@ class _LoginForm extends StatelessWidget {
               child: Container(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 80, vertical: 15),
-                child: const Text(
-                  'Iniciar sesión',
-                  style: TextStyle(color: Colors.white, fontSize: 20),
+                child: Text(
+                  loginForm.isLoading ? 'Espere' : 'Iniciar sesión',
+                  style: const TextStyle(color: Colors.white, fontSize: 20),
                 ),
               ),
             )
