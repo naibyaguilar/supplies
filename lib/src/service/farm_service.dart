@@ -25,8 +25,6 @@ class FarmService extends ChangeNotifier {
         final temp = Farm.fromMap(i);
         this.farms.add(temp);
       }
-      print(this.farms);
-
       isLoading = false;
       notifyListeners();
 

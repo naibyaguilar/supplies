@@ -14,6 +14,7 @@ class HomeScreen extends StatelessWidget {
     int _selectedPageIndex = 0;
     final activityService = Provider.of<ActivitiesService>(context);
     if (activityService.isLoading) return const LoadingScreen();
+    // *TODO: VERIFICAR LOGIN
 
     return Scaffold(
       extendBodyBehindAppBar: true,

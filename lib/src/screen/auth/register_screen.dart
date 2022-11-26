@@ -218,7 +218,10 @@ class _RegisterFormState extends State<_RegisterForm> {
                     final String? errorMessage =
                         await authService.createUser(registerForm);
                     if (errorMessage == null) {
-                      Navigator.pushReplacementNamed(context, 'home');
+                      NotificationsService.showSnackbar(
+                          'Registro Existoso, como tu', context);
+
+                      Navigator.pushReplacementNamed(context, 'login');
                     } else {
                       NotificationsService.showSnackbar(errorMessage, context);
                       registerForm.isLoading = false;

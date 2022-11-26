@@ -1,15 +1,17 @@
 import 'dart:convert';
-import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+
 import 'package:http/http.dart' as http;
-import 'package:supplies/src/models/models.dart';
 
 import '../providers/providers.dart';
 
 class AuthService extends ChangeNotifier {
   final String _baseUrl = 'suppliesfarm.azurewebsites.net';
+
+  final storage = FlutterSecureStorage();
 
   Future<String?> createUser(RegisterFormProvider user) async {
     final Map<String, List<dynamic>> authData = {
@@ -29,18 +31,15 @@ class AuthService extends ChangeNotifier {
 
     final headers = {HttpHeaders.contentTypeHeader: 'application/json'};
     final url = Uri.http(_baseUrl, '/api/supplies/both');
-    log(json.encode(authData));
+
     final resp =
         await http.post(url, headers: headers, body: json.encode(authData));
-    final decodedResp = json.decode(resp.body);
+    final List<dynamic> decodedResp = json.decode(resp.body);
 
-    if (decodedResp.containsKey('idToken')) {
-      // Token hay que guardarlo en un lugar seguro
-      //await storage.write(key: 'token', value: decodedResp['idToken']);
-      // decodedResp['idToken'];
+    if (decodedResp.isNotEmpty) {
       return null;
     } else {
-      return decodedResp['error']['message'];
+      return 'Usuario invalido';
     }
   }
 
@@ -57,7 +56,8 @@ class AuthService extends ChangeNotifier {
     //NO hay TOken asi que guardamos el ID no más
     if (decodedResp.isNotEmpty) {
       // Token hay que guardarlo en un lugar seguro
-      //await storage.write(key: 'token', value: decodedResp['idToken']);
+      await storage.write(
+          key: 'id', value: decodedResp[0]['id_user'].toString());
       return null;
     } else {
       return 'Usuario invalido';
