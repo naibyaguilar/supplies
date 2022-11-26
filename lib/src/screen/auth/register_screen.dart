@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
-// import 'package:provider/provider.dart';
-
-// import '../models/login_form_provider.dart';
+import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
+import '../../providers/providers.dart';
+import '../../service/service.dart';
 import '../../ui/input_decorations.dart';
+import '../../widgets/widgets.dart';
 
 class RegisterScreen extends StatelessWidget {
   const RegisterScreen({super.key});
@@ -22,8 +24,9 @@ class RegisterScreen extends StatelessWidget {
                 fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 10),
-          // ignore: todo
-          const _RegisterForm(), // *TODO: CREATE ChangeNotifierProvider
+          ChangeNotifierProvider(
+              create: (_) => RegisterFormProvider(),
+              child: const _RegisterForm()),
           TextButton(
               onPressed: () => Navigator.pushReplacementNamed(context, 'login'),
               child: RichText(
@@ -43,12 +46,21 @@ class RegisterScreen extends StatelessWidget {
   }
 }
 
-class _RegisterForm extends StatelessWidget {
+class _RegisterForm extends StatefulWidget {
   const _RegisterForm();
+
+  @override
+  State<_RegisterForm> createState() => _RegisterFormState();
+}
+
+class _RegisterFormState extends State<_RegisterForm> {
+  TextEditingController dateController = TextEditingController();
+  late String pass = '';
   @override
   Widget build(BuildContext context) {
-    // final registerForm = Provider.of<RegisterFormProvider>(context);
+    final registerForm = Provider.of<RegisterFormProvider>(context);
     return Form(
+      key: registerForm.formKey,
       autovalidateMode: AutovalidateMode.always,
       child: Column(
         children: [
@@ -61,7 +73,7 @@ class _RegisterForm extends StatelessWidget {
                 hintText: 'Moses Urang',
                 labelText: 'Nombre completo',
               ),
-              // onChanged: (value) => registerForm.name = value,
+              onChanged: (value) => registerForm.name = value,
               validator: (value) {
                 return (value != null && value.length >= 6)
                     ? null
@@ -78,7 +90,7 @@ class _RegisterForm extends StatelessWidget {
                 hintText: 'moses@gmail.com',
                 labelText: 'Correo electrónico',
               ),
-              // onChanged: (value) => registerForm.email = value,
+              onChanged: (value) => registerForm.email = value,
               validator: (value) {
                 String pattern =
                     r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
@@ -98,7 +110,7 @@ class _RegisterForm extends StatelessWidget {
                 hintText: '+2348167532702',
                 labelText: 'Número de celular',
               ),
-              // onChanged: (value) => registerForm.phome = value,
+              onChanged: (value) => registerForm.phone = value,
               validator: (value) {
                 String pattern =
                     r'(^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$)';
@@ -112,25 +124,37 @@ class _RegisterForm extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: TextFormField(
+              controller: dateController,
               autocorrect: false,
               keyboardType: TextInputType.datetime,
-              decoration: InputDecorations.authInputDecoration(
-                hintText: 'DD/MM/YYYY',
-                labelText: 'Fecha de nacimiento',
-              ),
-              // inputFormatters: [
-              //   WhitelistingTextInputFormatter(RegExp("[0-9/]")),
-              //   LengthLimitingTextInputFormatter(10),
-              //   CustomDateTextFormatter(),
-              // ],
-              // onChanged: (value) => registerForm.brithday = value,
+              decoration: const InputDecoration(
+                  icon: Icon(Icons.calendar_today),
+                  labelText: "Selecciona una fecha"),
+              onTap: () async {
+                DatePicker();
+                DateTime? pickedDate = await showDatePicker(
+                    context: context,
+                    initialDate: DateTime.now(),
+                    firstDate: DateTime(1900),
+                    lastDate: DateTime(2900));
+                if (pickedDate != null) {
+                  String formattedDate =
+                      DateFormat('yyyy-MM-dd').format(pickedDate);
+
+                  setState(() {
+                    dateController.text = formattedDate.toString();
+                  });
+                } else {
+                  NotificationsService.showSnackbar(
+                      "Date is not selected", context);
+                }
+              },
+              onChanged: (value) => registerForm.birthday = dateController.text,
               validator: (value) {
                 String pattern =
-                    r'(^[0-2][0-9][\/]?[0-2][0-9][\/]?[0-2][0-9][0-9][0-9]$)';
+                    r'(^[0-2][0-9][0-9][0-9][\/]?[0-2][0-9][\/]?[0-2][0-9]$)';
                 RegExp regExp = RegExp(pattern);
-                return regExp.hasMatch(value ?? '')
-                    ? null
-                    : 'Este valor es requerido';
+                return (value != null) ? null : 'Este valor es requerido';
               },
             ),
           ),
@@ -144,7 +168,9 @@ class _RegisterForm extends StatelessWidget {
                 hintText: '*********',
                 labelText: 'Contraseña',
               ),
-              // onChanged: (value) => registerForm.password = value,
+              onChanged: (value) => setState(() {
+                pass = value;
+              }),
               validator: (value) {
                 return (value != null && value.length >= 6)
                     ? null
@@ -162,9 +188,9 @@ class _RegisterForm extends StatelessWidget {
                 hintText: '*********',
                 labelText: 'Confirmar Contraseña',
               ),
-              // onChanged: (value) => registerForm.password = value,
+              onChanged: (value) => registerForm.password = value,
               validator: (value) {
-                return (value != null && value.length >= 6)
+                return (value != null && value == pass)
                     ? null
                     : 'Las contraseñas no coinciden';
               },
@@ -179,20 +205,28 @@ class _RegisterForm extends StatelessWidget {
             ),
           ),
           MaterialButton(
-            onPressed: (() {} //registerForm.isLoading
-                //     ? null
-                //     : () async {
-                //         FocusScope.of(context).unfocus();
-                //         // final authService =
-                //         //     Provider.of<AuthService>(context, listen: false);
-                //         if (!registerForm.isValidForm()) return;
-                //         registerForm.isLoading = true;
+            onPressed: registerForm.isLoading
+                ? null
+                : () async {
+                    FocusScope.of(context).unfocus();
+                    final authService =
+                        Provider.of<AuthService>(context, listen: false);
+                    if (!registerForm.isValidForm()) return;
+                    registerForm.isLoading = true;
 
-                //
-                // ignore: todo
-                //         // TODO: validar si el login es correcto y pantallas de error
-                //       }
-                ),
+                    // Si el Register es correcto
+                    final String? errorMessage =
+                        await authService.createUser(registerForm);
+                    if (errorMessage == null) {
+                      NotificationsService.showSnackbar(
+                          'Registro Existoso, como tu', context);
+
+                      Navigator.pushReplacementNamed(context, 'login');
+                    } else {
+                      NotificationsService.showSnackbar(errorMessage, context);
+                      registerForm.isLoading = false;
+                    }
+                  },
             shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
             disabledColor: Colors.blueGrey,
@@ -200,9 +234,9 @@ class _RegisterForm extends StatelessWidget {
             color: const Color(0xEF007CFF),
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 80, vertical: 15),
-              child: const Text(
-                'Ingresar',
-                style: TextStyle(
+              child: Text(
+                registerForm.isLoading ? 'Espere' : 'Ingresar',
+                style: const TextStyle(
                   color: Colors.white,
                   fontSize: 18,
                 ),

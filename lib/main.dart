@@ -1,8 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:supplies/src/screen/screens.dart';
+import 'package:supplies/src/service/service.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(AppState());
+}
+
+class AppState extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => ActivitiesService()),
+        ChangeNotifierProvider(create: (_) => AuthService()),
+        ChangeNotifierProvider(create: (_) => PersonaService())
+      ],
+      child: const MyApp(),
+    );
+  }
 }
 
 class MyApp extends StatelessWidget {
@@ -23,6 +39,7 @@ class MyApp extends StatelessWidget {
         'login': (_) => const LoginScreen(),
         'register': (_) => const RegisterScreen(),
         'farm_admin': (_) => const FarmAdminScreen(),
+        'assingId': (_) => const AssignScreen(),
         'profile': (_) => const ProfileScreen()
       },
     );

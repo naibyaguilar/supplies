@@ -1,17 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
+import 'package:supplies/src/service/service.dart';
 
 import '../../widgets/widgets.dart';
-
-// import 'package:provider/provider.dart';
-// import '../models/models.dart';
+import '../screens.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
   @override
   Widget build(BuildContext context) {
-    // final _person = Provider.of<Person>(context);
+    final personService = Provider.of<PersonaService>(context);
+    if (personService.isLoading) return const LoadingScreen();
     var screenSize = MediaQuery.of(context).size;
     final _selectedPageIndex = <int>[2, 1];
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -44,7 +47,9 @@ class ProfileScreen extends StatelessWidget {
                               ),
                             ),
                             Text(
-                              '_person.name',
+                              (personService.person.isNotEmpty)
+                                  ? personService.person[0].name
+                                  : '',
                               style: TextStyle(
                                   fontSize: screenSize.width * 0.05,
                                   color: Colors.grey[800]),
@@ -57,16 +62,48 @@ class ProfileScreen extends StatelessWidget {
                 ],
               ),
             ),
-            _getActionMenu('Correo electrónico', '_person.email', Icons.email,
-                () {}, screenSize.width),
-            _getActionMenu('Número de celular', '_person.phone', Icons.phone,
-                () {}, screenSize.width),
-            _getActionMenu('Fecha de nacimiento', '_person.birthday',
-                Icons.calendar_month_rounded, () {}, screenSize.width),
-            _getActionMenu('Dirección', '_person.address', Icons.home_filled,
-                () {}, screenSize.width),
-            _getActionMenu('Contraseña', '_person.password', Icons.password,
-                () {}, screenSize.width),
+            _getActionMenu(
+                'Correo electrónico',
+                (personService.user.isNotEmpty)
+                    ? personService.user[0].email
+                    : '',
+                Icons.email,
+                () {},
+                screenSize.width),
+            _getActionMenu(
+                'Número de celular',
+                (personService.person.isNotEmpty)
+                    ? personService.person[0].phone
+                    : '',
+                Icons.phone,
+                () {},
+                screenSize.width),
+            _getActionMenu(
+                'Fecha de nacimiento',
+                DateFormat('yyyy-MM-dd')
+                    .format((personService.person.isNotEmpty)
+                        ? personService.person[0].birthday
+                        : DateTime.now())
+                    .toString(),
+                Icons.calendar_month_rounded,
+                () {},
+                screenSize.width),
+            _getActionMenu(
+                'Dirección',
+                (personService.person.isNotEmpty)
+                    ? personService.person[0].address
+                    : '',
+                Icons.home_filled,
+                () {},
+                screenSize.width),
+            _getActionMenu(
+                'Contraseña',
+                (personService.user.isNotEmpty)
+                    ? personService.user[0].password
+                    : '',
+                Icons.password,
+                () {},
+                screenSize.width),
             ListTile(
               title: Text(
                 'Administrando',

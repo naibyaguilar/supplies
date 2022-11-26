@@ -1,2 +1,4 @@
-export 'package:supplies/src/models/login_form_provider.dart';
-export 'package:supplies/src/models/person_model.dart';
+export 'package:supplies/src/models/users_model.dart';
+export 'package:supplies/src/models/farm_model.dart';
+export 'package:supplies/src/models/activity_model.dart';
+export 'package:supplies/src/models/mult_relation_model.dart';
