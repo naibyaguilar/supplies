@@ -3,65 +3,66 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:supplies/src/service/service.dart';
 
+import '../../models/models.dart';
 import '../../widgets/widgets.dart';
 import '../screens.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
-    final personService = Provider.of<PersonaService>(context);
+    final personService = Provider.of<ProfileService>(context);
+    final authService = Provider.of<AuthService>(context, listen: false);
     if (personService.isLoading) return const LoadingScreen();
+
     var screenSize = MediaQuery.of(context).size;
-    final _selectedPageIndex = <int>[2, 1];
 
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
         automaticallyImplyLeading: true,
         elevation: 0,
-        backgroundColor: const Color(0xffCCE5FF),
+        backgroundColor: const Color(0xFFFFFFFF),
+        bottom: PreferredSize(
+            preferredSize: Size.fromHeight(screenSize.height / 6),
+            child: Container()),
+        flexibleSpace: ClipPath(
+          clipper: CustomShape(),
+          child: Container(
+              height: screenSize.height / 3, // 157
+              color: const Color(0xffCCE5FF),
+              child: Center(
+                child: Column(
+                  children: [
+                    SizedBox(
+                      height: screenSize.height / 20,
+                    ),
+                    const Padding(
+                      padding: EdgeInsets.all(10.0),
+                      child: CircleAvatar(
+                        radius: 45,
+                        backgroundImage:
+                            AssetImage("assets/images/profile_default.png"),
+                      ),
+                    ),
+                    Text(
+                      (personService.person.isNotEmpty)
+                          ? personService.person[0].name
+                          : '',
+                      style: TextStyle(
+                          fontSize: screenSize.width * 0.05,
+                          color: Colors.grey[800]),
+                    ),
+                  ],
+                ),
+              )),
+        ),
       ),
       body: SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: Column(
           children: [
-            SizedBox(
-              height: screenSize.height / 5, // 157
-              child: Stack(
-                children: [
-                  ClipPath(
-                    clipper: CustomShape(),
-                    child: Container(
-                      height: screenSize.height / 3, // 157
-                      color: const Color(0xffCCE5FF),
-                      child: Center(
-                        child: Column(
-                          children: [
-                            const Padding(
-                              padding: EdgeInsets.all(2.0),
-                              child: CircleAvatar(
-                                radius: 45,
-                                backgroundImage: AssetImage(
-                                    "assets/images/profile_default.png"),
-                              ),
-                            ),
-                            Text(
-                              (personService.person.isNotEmpty)
-                                  ? personService.person[0].name
-                                  : '',
-                              style: TextStyle(
-                                  fontSize: screenSize.width * 0.05,
-                                  color: Colors.grey[800]),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
             _getActionMenu(
                 'Correo electrónico',
                 (personService.user.isNotEmpty)
@@ -113,22 +114,33 @@ class ProfileScreen extends StatelessWidget {
             SizedBox(
               width: screenSize.width,
               height: screenSize.height * 0.25,
-              child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                itemCount: (_selectedPageIndex.isEmpty)
-                    ? _selectedPageIndex.length + 1
-                    : _selectedPageIndex.length,
-                itemBuilder: (BuildContext context, int index) =>
-                    (index == _selectedPageIndex.length - 1)
-                        ? _setAddFarm(screenSize)
-                        : _getFarms(screenSize, context),
-              ),
+              child: FutureBuilder(
+                  future: personService.getMyFarm(),
+                  builder: (BuildContext context,
+                      AsyncSnapshot<List<Farm?>> snapshot) {
+                    if (!snapshot.hasData) return const Text('');
+
+                    return ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: (snapshot.data!.isEmpty)
+                          ? 1
+                          : snapshot.data!.length + 1,
+                      itemBuilder: (BuildContext context, int index) {
+                        if (index != snapshot.data!.length) {
+                          return _getFarms(
+                              screenSize, context, snapshot.data![index]!);
+                        } else {
+                          return _setAddFarm(screenSize, context);
+                        }
+                      },
+                    );
+                  }),
             ),
             ElevatedButton(
-                onPressed: () =>
-                    Navigator.pushReplacementNamed(context, 'login'),
-                // ignore: todo
-                // * TODO: Log Out
+                onPressed: () => {
+                      authService.logout(),
+                      Navigator.pushReplacementNamed(context, 'login')
+                    },
                 style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.all(Colors.red)),
                 child: const Text('Cerrar Sesión'))
@@ -139,7 +151,7 @@ class ProfileScreen extends StatelessWidget {
   }
 }
 
-Card _getFarms(Size screenSize, BuildContext context) {
+Card _getFarms(Size screenSize, BuildContext context, Farm myfarm) {
   return Card(
     elevation: 25,
     child: SizedBox(
@@ -166,7 +178,7 @@ Card _getFarms(Size screenSize, BuildContext context) {
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Text(
-                    'Rancho',
+                    myfarm.type,
                     style: TextStyle(
                       fontSize: screenSize.width * 0.04,
                       color: Colors.white,
@@ -178,24 +190,24 @@ Card _getFarms(Size screenSize, BuildContext context) {
                 ),
               ),
               ListTile(
-                title: Text(' La Revancha',
+                title: Text(myfarm.name,
                     style: TextStyle(
                         fontSize: screenSize.width * 0.05,
                         color: Colors.white)),
-                subtitle: Text('C. 86 Santa Cruz Palomeque, Yuc.',
+                subtitle: Text(myfarm.address,
                     style: TextStyle(
                         fontSize: screenSize.width * 0.03, color: Colors.grey)),
               )
             ],
           ),
         ),
-        onTap: () => Navigator.pushReplacementNamed(context, 'farm_admin'),
+        onTap: () => Navigator.pushNamed(context, 'farm_admin'),
       ),
     ),
   );
 }
 
-Card _setAddFarm(Size screenSize) {
+Card _setAddFarm(Size screenSize, BuildContext context) {
   return Card(
     elevation: 25,
     child: SizedBox(
@@ -207,7 +219,12 @@ Card _setAddFarm(Size screenSize) {
           size: 40,
           color: Colors.amber,
         ),
-        onTap: () {},
+        onTap: () {
+          final farmService = Provider.of<FarmService>(context, listen: false);
+          farmService.selectedfarm = new Farm(
+              name: '', area: 0.0, address: '', type: 'type', adminId: 12);
+          Navigator.pushNamed(context, 'farm');
+        },
       ),
     ),
   );

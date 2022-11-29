@@ -11,7 +11,7 @@ class TaskCard extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: InkWell(
-        onTap: () => Navigator.pushReplacementNamed(context, 'assingId'),
+        onTap: () => Navigator.pushNamed(context, 'assingId'),
         child: Container(
             margin: const EdgeInsets.only(top: 10, bottom: 30),
             width: double.infinity,

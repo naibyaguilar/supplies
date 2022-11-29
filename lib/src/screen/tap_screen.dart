@@ -34,11 +34,7 @@ class HomeScreen extends StatelessWidget {
           ),
           Padding(
             padding: EdgeInsets.only(top: screenSize.height * 0.11),
-            child: ListView.builder(
-                itemCount: activityService.activities.length,
-                itemBuilder: (BuildContext context, int index) => TaskCard(
-                      activity: activityService.activities[index],
-                    )),
+            child: ListHome(activityService: activityService),
           ),
         ],
       ),

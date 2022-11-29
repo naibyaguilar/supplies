@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'package:flutter/material.dart';
 
 import '../../widgets/widgets.dart';
@@ -9,33 +8,35 @@ class AssignScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var screenSize = MediaQuery.of(context).size;
-    log((screenSize.height / 5.5).toString());
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: true,
         elevation: 0,
-        backgroundColor: const Color(0xffCCE5FF),
+        backgroundColor: const Color(0xFFFFFFFF),
+        bottom: PreferredSize(
+            preferredSize: Size.fromHeight(screenSize.height / 8),
+            child: Container()),
+        flexibleSpace: ClipPath(
+          clipper: CustomShape(),
+          child: Container(
+              height: screenSize.height / 2, // 157
+              color: const Color(0xEF115DA9),
+              child: Center(
+                widthFactor: screenSize.width,
+                child: ListTile(
+                  title: Text(' ¡Hey!',
+                      style: TextStyle(
+                          fontSize: screenSize.width * 0.05,
+                          color: Colors.white)),
+                  subtitle: Text('          ¿Tienes esta actividad pendiente?',
+                      style: TextStyle(
+                          fontSize: screenSize.width * 0.04,
+                          color: Colors.grey)),
+                ),
+              )),
+        ),
       ),
-      // appBar: AppBar(
-      //   automaticallyImplyLeading: true,
-      //   toolbarHeight: screenSize.height / 6,
-
-      //   shape: RoundedRectangleBorder(
-      //       borderRadius: BorderRadius.vertical(
-      //           // top: Radius.circular(screenSize.width / 2),
-      //           bottom: Radius.circular(screenSize.width / 4))),
-      //   elevation: 0,
-      //   backgroundColor: const Color(0xEF115DA9),
-      //   title: const FittedBox(
-      //       fit: BoxFit.fitWidth,
-      //       child: Padding(
-      //         padding: EdgeInsets.all(8.0),
-      //         child: Text(
-      //           'Hola _persona.name, \n tienes algún pendiente...',
-      //           textAlign: TextAlign.center,
-      //         ),
-      //       )),
-      // ),
+      body: Container(),
     );
   }
 }

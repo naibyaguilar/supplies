@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
 
-class AppBarHome extends StatelessWidget {
+class AppBarHome extends StatefulWidget {
   const AppBarHome({super.key});
 
+  @override
+  State<AppBarHome> createState() => _AppBarHomeState();
+}
+
+class _AppBarHomeState extends State<AppBarHome> {
   @override
   Widget build(BuildContext context) {
     var screenSize = MediaQuery.of(context).size;
@@ -16,7 +21,12 @@ class AppBarHome extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: InkWell(
-              onDoubleTap: () => Navigator.pushNamed(context, 'profile'),
+              onDoubleTap: () {
+                Navigator.pushNamed(context, 'profile').then((_) {
+                  setState(() {});
+                });
+                // setState(() {});
+              },
               onTap: () {},
               child: const CircleAvatar(
                 radius: 35,

@@ -55,9 +55,8 @@ class AuthService extends ChangeNotifier {
     final List<dynamic> decodedResp = json.decode(resp.body);
     //NO hay TOken asi que guardamos el ID no más
     if (decodedResp.isNotEmpty) {
-      // Token hay que guardarlo en un lugar seguro
       await storage.write(
-          key: 'id', value: decodedResp[0]['id_user'].toString());
+          key: 'id', value: decodedResp[0]['id_person'].toString());
       return null;
     } else {
       return 'Usuario invalido';
@@ -65,7 +64,11 @@ class AuthService extends ChangeNotifier {
   }
 
   Future logout() async {
-    // await storage.delete(key: 'id');
+    await storage.delete(key: 'id');
     return;
+  }
+
+  Future<String> readToken() async {
+    return await storage.read(key: 'id') ?? '';
   }
 }
