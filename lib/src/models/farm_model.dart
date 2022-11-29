@@ -10,10 +10,10 @@ class Farm {
     required this.name,
     required this.area,
     required this.address,
-    required this.latitude,
-    required this.longitude,
+    this.latitude,
+    this.longitude,
     required this.type,
-    required this.createdAt,
+    this.createdAt,
     required this.adminId,
   });
 
@@ -24,7 +24,7 @@ class Farm {
   String? latitude;
   String? longitude;
   String type;
-  DateTime createdAt;
+  DateTime? createdAt;
   int adminId;
 
   factory Farm.fromJson(String str) => Farm.fromMap(json.decode(str));
@@ -51,7 +51,7 @@ class Farm {
         "latitude": latitude,
         "longitude": longitude,
         "type": type,
-        "created_at": createdAt.toIso8601String(),
+        "created_at": createdAt,
         "admin_id": adminId,
       };
 }
