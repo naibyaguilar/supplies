@@ -61,7 +61,7 @@ class Users {
 class Person {
   Person({
     this.id,
-    required this.userId,
+    this.userId,
     required this.name,
     required this.phone,
     required this.address,
@@ -70,7 +70,7 @@ class Person {
   });
 
   int? id;
-  int userId;
+  int? userId;
   String name;
   String phone;
   String address;
@@ -83,14 +83,20 @@ class Person {
 
   factory Person.fromMap(Map<String, dynamic> json) => Person(
         id: json["id"],
-        userId: json["user_id"],
         name: json["name"],
         phone: json["phone"],
         address: json["address"],
         photo: json["photo"],
         birthday: DateTime.parse(json["birthday"]),
       );
-
+  factory Person.fromMapMember(Map<String, dynamic> json) => Person(
+        id: json["id_person"],
+        name: json["nombre_persona"],
+        phone: json["phone"],
+        address: json["address"],
+        photo: json["photo"],
+        birthday: DateTime.parse(json["birthday"]),
+      );
   Map<String, dynamic> toMap() => {
         "id": id,
         "user_id": userId,

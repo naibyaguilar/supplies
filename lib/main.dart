@@ -48,7 +48,6 @@ class MyApp extends StatelessWidget {
         'profile': (_) => const ProfileScreen(),
         'assingId': (_) => const AssignScreen(),
         'farm': (_) => const FarmScreen(),
-        'farm_admin': (_) => const FarmAdminScreen(),
         'login': (_) => const LoginScreen(),
         'register': (_) => const RegisterScreen(),
       },

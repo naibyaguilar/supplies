@@ -6,14 +6,12 @@ import '../service/service.dart';
 import '../ui/input_decorations.dart';
 
 class FarmForm extends StatelessWidget {
-  // String nwval = 'Agricola';
   @override
   Widget build(BuildContext context) {
     final farmService = Provider.of<FarmService>(context);
     final farmForm = Provider.of<FarmFormProvider>(context);
 
     final listtype = farmService.listtype;
-    // String dropdownValue = listtype.first;
     return Form(
       key: farmForm.formKey,
       autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -40,14 +38,6 @@ class FarmForm extends StatelessWidget {
                     color: const Color(0xEF007CFF),
                   ),
                   onChanged: (String? value) => farmForm.dropdownValue = value!,
-
-                  //     {
-                  //   nwval = value!;
-                  //   setState() {
-                  //     nwval;
-                  //     print(nwval);
-                  //   }
-                  // },
                   items: listtype.map<DropdownMenuItem<String>>((String value) {
                     return DropdownMenuItem<String>(
                       value: value,

@@ -16,65 +16,69 @@ class TabsPage extends StatelessWidget {
       create: (_) => _NavigationModel(),
       child: Scaffold(
         extendBodyBehindAppBar: true,
-        appBar: PreferredSize(
-            preferredSize: Size.fromHeight(screenSize.height / 6),
-            child: AppBar(
-              automaticallyImplyLeading: true,
-              elevation: 0,
-              backgroundColor: const Color(0xFFFFFFFF).withOpacity(0.5),
-              flexibleSpace: ClipPath(
-                clipper: CustomPaintPages(),
-                child: Container(
-                  height: screenSize.height / 2, // 157
-                  color: const Color(0xEF115DA9).withOpacity(0.2),
-                  child: Row(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(5.0),
-                        child: InkWell(
-                          onDoubleTap: () {
-                            Navigator.pushNamed(context, 'profile');
-                            // setState(() {});
-                          },
-                          onTap: () {},
-                          child: const CircleAvatar(
-                            radius: 35,
-                            backgroundImage:
-                                AssetImage("assets/images/profile_default.png"),
-                          ),
-                        ),
-                      ),
-                      const Expanded(
-                        child: Text(
-                          'Buenas tardes Moisés Urang',
-                          style: TextStyle(
-                              fontSize: 20,
-                              color: Colors.black54,
-                              fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: IconButton(
-                          iconSize: 50,
-                          icon: const Icon(
-                            Icons.notifications,
-                            color: Colors.black54,
-                          ),
-                          onPressed: () {},
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            )
-            //const AppBarHome(),
-            ),
+        appBar: _appBarHome(screenSize, context),
         body: _Paginas(),
         bottomNavigationBar: _Navigation(),
       ),
     );
+  }
+
+  PreferredSize _appBarHome(Size screenSize, BuildContext context) {
+    return PreferredSize(
+        preferredSize: Size.fromHeight(screenSize.height / 6),
+        child: AppBar(
+          automaticallyImplyLeading: false,
+          elevation: 0,
+          backgroundColor: const Color(0xFFFFFFFF).withOpacity(0.5),
+          flexibleSpace: ClipPath(
+            clipper: CustomPaintPages(),
+            child: Container(
+              height: screenSize.height / 2, // 157
+              color: const Color(0xEF115DA9).withOpacity(0.2),
+              child: Row(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(5.0),
+                    child: InkWell(
+                      onDoubleTap: () {
+                        Navigator.pushNamed(context, 'profile');
+                        // setState(() {});
+                      },
+                      onTap: () {},
+                      child: const CircleAvatar(
+                        radius: 35,
+                        backgroundImage:
+                            AssetImage("assets/images/profile_default.png"),
+                      ),
+                    ),
+                  ),
+                  const Expanded(
+                    child: Text(
+                      'Buenas tardes Moisés Urang',
+                      style: TextStyle(
+                          fontSize: 20,
+                          color: Colors.black54,
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: IconButton(
+                      iconSize: 50,
+                      icon: const Icon(
+                        Icons.notifications,
+                        color: Colors.black54,
+                      ),
+                      onPressed: () {},
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        )
+        //const AppBarHome(),
+        );
   }
 }
 

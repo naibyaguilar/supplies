@@ -14,7 +14,7 @@ class AssignScreen extends StatelessWidget {
         elevation: 0,
         backgroundColor: const Color(0xFFFFFFFF),
         bottom: PreferredSize(
-            preferredSize: Size.fromHeight(screenSize.height / 8),
+            preferredSize: Size.fromHeight(screenSize.height * 0.15),
             child: Container()),
         flexibleSpace: ClipPath(
           clipper: CustomShape(),

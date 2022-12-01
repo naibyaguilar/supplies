@@ -34,9 +34,11 @@ class AuthService extends ChangeNotifier {
 
     final resp =
         await http.post(url, headers: headers, body: json.encode(authData));
-    final List<dynamic> decodedResp = json.decode(resp.body);
+    final decodedResp = json.decode(resp.body);
 
-    if (decodedResp.isNotEmpty) {
+    if (decodedResp != null) {
+      await storage.write(key: 'id', value: decodedResp['insertId'].toString());
+
       return null;
     } else {
       return 'Usuario invalido';

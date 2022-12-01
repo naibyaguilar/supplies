@@ -13,7 +13,7 @@ class Activities {
     required this.executionDate,
     required this.redo,
     this.period,
-    required this.employeeId,
+    required this.employeeName,
     this.directedTo,
     this.type,
     required this.active,
@@ -29,7 +29,7 @@ class Activities {
   DateTime executionDate;
   int redo;
   int? period;
-  int employeeId;
+  String employeeName;
   int? directedTo;
   String? type;
   int active;
@@ -40,17 +40,17 @@ class Activities {
   String toJson() => json.encode(toMap());
 
   factory Activities.fromMap(dynamic json) => Activities(
-        id: json["id"],
-        farmId: json["farm_id"],
+        id: json["id_activitie"],
+        farmId: json["id_farm"],
         addBy: json["add_by"],
         createdAt: DateTime.parse(json["created_at"]),
-        name: json["name"],
+        name: json["name_farm"],
         description: json["description"],
         note: json["note"],
         executionDate: DateTime.parse(json["execution_date"]),
         redo: json["redo"],
         period: json["period"],
-        employeeId: json["employee_id"],
+        employeeName: json["employee_name"],
         directedTo: json["directedTo"],
         type: json["type"],
         active: json["active"],
@@ -67,7 +67,7 @@ class Activities {
         "execution_date": executionDate.toIso8601String(),
         "redo": redo,
         "period": period,
-        "employee_id": employeeId,
+        "employee_id": employeeName,
         "directedTo": directedTo,
         "type": type,
         "active": active,
