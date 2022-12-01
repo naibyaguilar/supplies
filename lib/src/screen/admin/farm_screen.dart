@@ -27,18 +27,15 @@ class _FarmScreenBody extends StatelessWidget {
   final FarmService farmService;
   @override
   Widget build(BuildContext context) {
-    final farmForm = Provider.of<FarmFormProvider>(context);
-    //final farm = farmForm.farm;
-
     return Scaffold(
       appBar: AppBar(
-        title: Text('Agregar tu granja o rancho'),
+        title: const Text('Agregar tu granja o rancho'),
       ),
       body: SingleChildScrollView(
           child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
         child: Container(
-          padding: EdgeInsets.symmetric(horizontal: 20),
+          padding: const EdgeInsets.symmetric(horizontal: 20),
           width: double.infinity,
           decoration: _buildBoxDecoration(),
           child: FarmForm(),
@@ -49,13 +46,13 @@ class _FarmScreenBody extends StatelessWidget {
 
   BoxDecoration _buildBoxDecoration() => BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.only(
+          borderRadius: const BorderRadius.only(
               bottomRight: Radius.circular(25),
               bottomLeft: Radius.circular(25)),
           boxShadow: [
             BoxShadow(
                 color: Colors.black.withOpacity(0.05),
-                offset: Offset(0, 5),
+                offset: const Offset(0, 5),
                 blurRadius: 5)
           ]);
 }

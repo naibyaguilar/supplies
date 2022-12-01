@@ -20,49 +20,18 @@ class ProfileScreen extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(
-        automaticallyImplyLeading: true,
-        elevation: 0,
-        backgroundColor: const Color(0xFFFFFFFF),
-        bottom: PreferredSize(
-            preferredSize: Size.fromHeight(screenSize.height / 6),
-            child: Container()),
-        flexibleSpace: ClipPath(
-          clipper: CustomShape(),
-          child: Container(
-              height: screenSize.height / 3, // 157
-              color: const Color(0xffCCE5FF),
-              child: Center(
-                child: Column(
-                  children: [
-                    SizedBox(
-                      height: screenSize.height / 20,
-                    ),
-                    const Padding(
-                      padding: EdgeInsets.all(10.0),
-                      child: CircleAvatar(
-                        radius: 45,
-                        backgroundImage:
-                            AssetImage("assets/images/profile_default.png"),
-                      ),
-                    ),
-                    Text(
-                      (personService.person.isNotEmpty)
-                          ? personService.person[0].name
-                          : '',
-                      style: TextStyle(
-                          fontSize: screenSize.width * 0.05,
-                          color: Colors.grey[800]),
-                    ),
-                  ],
-                ),
-              )),
-        ),
-      ),
+      appBar: _appBarProfile(screenSize),
       body: SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: Column(
           children: [
+            Text(
+              (personService.person.isNotEmpty)
+                  ? personService.person[0].name
+                  : '',
+              style: TextStyle(
+                  fontSize: screenSize.width * 0.05, color: Colors.grey[800]),
+            ),
             _getActionMenu(
                 'Correo electrónico',
                 (personService.user.isNotEmpty)
@@ -149,6 +118,33 @@ class ProfileScreen extends StatelessWidget {
       ),
     );
   }
+
+  PreferredSize _appBarProfile(Size screenSize) {
+    return PreferredSize(
+      preferredSize: Size.fromHeight(screenSize.height / 6),
+      child: AppBar(
+        automaticallyImplyLeading: true,
+        elevation: 0,
+        backgroundColor: const Color(0xFFFFFFFF),
+        flexibleSpace: ClipPath(
+          clipper: CustomShape(),
+          child: Container(
+              height: screenSize.height * 230, // 157
+              color: const Color(0xffCCE5FF),
+              child: const Center(
+                child: Padding(
+                  padding: EdgeInsets.only(top: 51),
+                  child: CircleAvatar(
+                    radius: 45,
+                    backgroundImage:
+                        AssetImage("assets/images/profile_default.png"),
+                  ),
+                ),
+              )),
+        ),
+      ),
+    );
+  }
 }
 
 Card _getFarms(Size screenSize, BuildContext context, Farm myfarm) {
@@ -201,7 +197,12 @@ Card _getFarms(Size screenSize, BuildContext context, Farm myfarm) {
             ],
           ),
         ),
-        onTap: () => Navigator.pushNamed(context, 'farm_admin'),
+        onTap: () => Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => FarmAdminScreen(
+                      idfarm: myfarm.id,
+                    ))),
       ),
     ),
   );
@@ -221,6 +222,7 @@ Card _setAddFarm(Size screenSize, BuildContext context) {
         ),
         onTap: () {
           final farmService = Provider.of<FarmService>(context, listen: false);
+          // ignore: unnecessary_new
           farmService.selectedfarm = new Farm(
               name: '', area: 0.0, address: '', type: 'type', adminId: 12);
           Navigator.pushNamed(context, 'farm');

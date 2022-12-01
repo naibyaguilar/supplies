@@ -55,3 +55,31 @@ class Farm {
         "admin_id": adminId,
       };
 }
+
+class Employees {
+  Employees({
+    this.id,
+    required this.farmId,
+    required this.employeeId,
+  });
+
+  int? id;
+  int farmId;
+  int employeeId;
+
+  factory Employees.fromJson(String str) => Employees.fromMap(json.decode(str));
+
+  String toJson() => json.encode(toMap());
+
+  factory Employees.fromMap(Map<String, dynamic> json) => Employees(
+        id: json["id"],
+        farmId: json["farm_id"],
+        employeeId: json["employee_id"],
+      );
+
+  Map<String, dynamic> toMap() => {
+        "id": id,
+        "farm_id": farmId,
+        "employee_id": employeeId,
+      };
+}

@@ -190,7 +190,7 @@ class _RegisterFormState extends State<_RegisterForm> {
               ),
               onChanged: (value) => registerForm.password = value,
               validator: (value) {
-                return (value != null && value == pass)
+                return (value != null && value.length >= 6 && value == pass)
                     ? null
                     : 'Las contraseñas no coinciden';
               },
@@ -220,8 +220,8 @@ class _RegisterFormState extends State<_RegisterForm> {
                     if (errorMessage == null) {
                       NotificationsService.showSnackbar(
                           'Registro Existoso, como tu', context);
-
-                      Navigator.pushReplacementNamed(context, 'login');
+                      registerForm.isLoading = false;
+                      Navigator.pushReplacementNamed(context, 'home');
                     } else {
                       NotificationsService.showSnackbar(errorMessage, context);
                       registerForm.isLoading = false;

@@ -7,25 +7,19 @@ import 'package:http/http.dart' as http;
 
 class ActivitiesService extends ChangeNotifier {
   final String _baseUrl = 'suppliesfarm.azurewebsites.net';
-  final storage = const FlutterSecureStorage(); // *TODO: QUITAR
+  final storage = const FlutterSecureStorage();
 
-  final List<Activities> activities = [];
   bool isLoading = true;
 
-  ActivitiesService() {
-    LoadActivities();
-  }
-
-  Future<List<Activities>> LoadActivities() async {
+  Future<List<Activities>> LoadActivitiesbyFarmAdmin() async {
     final Map<String, dynamic> personData = {
-      "table": "activities",
-      "param": "farm_id",
-      "value": "2" // Cambiar
+      "idperson": await storage.read(key: 'id')
     };
+    final List<Activities> activities = [];
 
     isLoading = true;
 
-    final url = Uri.http(_baseUrl, '/api/supplies/any');
+    final url = Uri.http(_baseUrl, '/api/supplies/getActivitiesbyFarmAdmin');
     final headers = {HttpHeaders.contentTypeHeader: 'application/json'};
 
     final resp =

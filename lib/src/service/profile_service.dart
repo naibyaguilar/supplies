@@ -124,35 +124,31 @@ class ProfileService extends ChangeNotifier {
   }
 
   Future<List<Person>> GetMember(int id) async {
-    final Map<String, dynamic> personData = {
-      "table": "employees",
-      "param": "farm_id",
-      "value": id
-    };
+    final Map<String, dynamic> memberData = {"idfarm": id};
 
-    List<Person> person = [];
+    List<Person> member = [];
     try {
       isLoading = true;
 
-      final url = Uri.http(_baseUrl, '/api/supplies/any');
+      final url = Uri.http(_baseUrl, '/api/supplies/getEmployeesFarm');
       final headers = {HttpHeaders.contentTypeHeader: 'application/json'};
 
       final resp =
-          await http.post(url, headers: headers, body: json.encode(personData));
+          await http.post(url, headers: headers, body: json.encode(memberData));
 
       final decodedResp = json.decode(resp.body);
 
       for (var i in decodedResp) {
-        final temp = Person.fromMap(i);
-        person.add(temp);
+        final temp = Person.fromMapMember(i);
+        member.add(temp);
       }
 
       isLoading = false;
       notifyListeners();
 
-      return person;
+      return member;
     } catch (e) {
-      return person;
+      return member;
     }
   }
 }
