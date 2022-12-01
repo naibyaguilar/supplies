@@ -1,17 +1,84 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:supplies/src/models/farm_model.dart';
 
 import '../providers/providers.dart';
 import '../service/service.dart';
 import '../ui/input_decorations.dart';
 
-class FarmForm extends StatelessWidget {
+class FarmForm extends StatefulWidget {
+  const FarmForm({super.key});
+
+  @override
+  State<FarmForm> createState() => _FarmFormState();
+}
+
+class _FarmFormState extends State<FarmForm> {
+  var currentStep = 0;
   @override
   Widget build(BuildContext context) {
+    List<Step> steps = [
+      Step(
+        title: Text('Granja'),
+        content: Container(),
+        state: currentStep == 0 ? StepState.editing : StepState.indexed,
+        isActive: true,
+      ),
+      Step(
+        title: Text('Contact'),
+        content: Container(),
+        state: currentStep == 1 ? StepState.editing : StepState.indexed,
+        isActive: true,
+      ),
+      Step(
+        title: Text('Upload'),
+        content: Container(),
+        state: StepState.complete,
+        isActive: true,
+      ),
+    ];
     final farmService = Provider.of<FarmService>(context);
     final farmForm = Provider.of<FarmFormProvider>(context);
 
     final listtype = farmService.listtype;
+    return Stepper(
+      steps: steps,
+      type: StepperType.horizontal,
+      onStepTapped: (step) {
+        setState(() {
+          currentStep = step;
+        });
+      },
+      onStepContinue: () {
+        setState(() {
+          // if (currentStep < steps.length - 1) {
+          //   if (currentStep == 0 &&
+          //       PersonalState.formKey.currentState.validate()) {
+          //     currentStep = currentStep + 1;
+          //   } else if (currentStep == 1 &&
+          //       ContactState.formKey.currentState.validate()) {
+          //     currentStep = currentStep + 1;
+          //   }
+          // } else {
+          //   currentStep = 0;
+          // }
+        });
+      },
+      onStepCancel: () {
+        setState(() {
+          if (currentStep > 0) {
+            currentStep = currentStep - 1;
+          } else {
+            currentStep = 0;
+          }
+        });
+      },
+    );
+    // farm(farmForm, listtype, farmService, context);
+  }
+
+  Form farm(FarmFormProvider farmForm, List<String> listtype,
+      FarmService farmService, BuildContext context) {
     return Form(
       key: farmForm.formKey,
       autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -96,13 +163,13 @@ class FarmForm extends StatelessWidget {
                   ? null
                   : () async {
                       FocusScope.of(context).unfocus();
-                      final farmService =
-                          Provider.of<FarmService>(context, listen: false);
-                      if (!farmForm.isValidForm()) return;
+                      // final farmService =
+                      //     Provider.of<FarmService>(context, listen: false);
+                      // if (!farmForm.isValidForm()) return;
                       farmForm.isLoading = true;
 
                       // Si el Register es correcto
-                      await farmService.saveOrCreateFarm(farmForm.farm);
+                      // await farmService.saveOrCreateFarm(farmForm.farm);
 
                       Navigator.pushReplacementNamed(context, 'profile');
                     },
@@ -115,7 +182,7 @@ class FarmForm extends StatelessWidget {
                 padding:
                     const EdgeInsets.symmetric(horizontal: 80, vertical: 15),
                 child: Text(
-                  farmForm.isLoading ? 'Espere' : 'Ingresar',
+                  farmForm.isLoading ? 'Espere' : 'Suguiente',
                   style: const TextStyle(
                     color: Colors.white,
                     fontSize: 18,

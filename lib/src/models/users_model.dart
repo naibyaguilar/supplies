@@ -4,28 +4,6 @@
 
 import 'dart:convert';
 
-class Data {
-  Data({
-    required this.data,
-    required this.user,
-    required this.person,
-  });
-
-  Map<String, List<dynamic>> data;
-  Users user;
-  Person person;
-/**
- * List<Word> temp = jsonMap['data'] 
-    .map((map) => map as Map<String, dynamic>)  
-    .map((Map<String, dynamic> map) => Word.fromJson(map)).toList(); //
- */
-  // String toJson() => json.encode(toMap());
-
-  // Map<String, dynamic> toMap() => {
-  //       "data": List<dynamic>.from(data.map((x) => x.toMap())),
-  //     };
-}
-
 class Users {
   Users({
     this.id,
