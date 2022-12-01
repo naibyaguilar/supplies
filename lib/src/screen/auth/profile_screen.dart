@@ -221,6 +221,7 @@ Card _setAddFarm(Size screenSize, BuildContext context) {
         ),
         onTap: () {
           final farmService = Provider.of<FarmService>(context, listen: false);
+          // ignore: unnecessary_new
           farmService.selectedfarm = new Farm(
               name: '', area: 0.0, address: '', type: 'type', adminId: 12);
           Navigator.pushNamed(context, 'farm');
