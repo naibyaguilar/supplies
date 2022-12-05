@@ -1,7 +1,3 @@
-// To parse this JSON data, do
-//
-//     final buildings = buildingsFromMap(jsonString);
-
 import 'dart:convert';
 
 class Buildings {
@@ -9,17 +5,17 @@ class Buildings {
     this.id,
     required this.funtion,
     required this.area,
-    required this.latitude,
-    required this.longitude,
-    required this.farmId,
+    this.latitude,
+    this.longitude,
+    this.farmId,
   });
 
   int? id;
   String funtion;
   double area;
-  String latitude;
-  String longitude;
-  int farmId;
+  String? latitude;
+  String? longitude;
+  int? farmId;
 
   factory Buildings.fromJson(String str) => Buildings.fromMap(json.decode(str));
 

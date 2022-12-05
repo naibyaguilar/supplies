@@ -97,7 +97,6 @@ class ProfileService extends ChangeNotifier {
     try {
       isLoading = true;
       // notifyListeners();
-
       final url = Uri.http(_baseUrl, '/api/supplies/any');
       final headers = {HttpHeaders.contentTypeHeader: 'application/json'};
 

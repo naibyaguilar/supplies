@@ -38,6 +38,7 @@ class AuthService extends ChangeNotifier {
 
     if (decodedResp != null) {
       await storage.write(key: 'id', value: decodedResp['insertId'].toString());
+      await storage.write(key: 'name', value: 'Moises');
 
       return null;
     } else {
@@ -59,6 +60,8 @@ class AuthService extends ChangeNotifier {
     if (decodedResp.isNotEmpty) {
       await storage.write(
           key: 'id', value: decodedResp[0]['id_person'].toString());
+      await storage.write(
+          key: 'name', value: decodedResp[0]['name'].toString());
       return null;
     } else {
       return 'Usuario invalido';

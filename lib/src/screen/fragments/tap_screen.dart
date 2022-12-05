@@ -1,9 +1,9 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:supplies/src/screen/screens.dart';
 import 'package:supplies/src/widgets/widgets.dart';
+
+import '../../service/service.dart';
 
 class TabsPage extends StatelessWidget {
   const TabsPage({super.key});
@@ -54,7 +54,7 @@ class TabsPage extends StatelessWidget {
                   ),
                   const Expanded(
                     child: Text(
-                      'Buenas tardes Moisés Urang',
+                      'Buenas tardes',
                       style: TextStyle(
                           fontSize: 20,
                           color: Colors.black54,
@@ -76,9 +76,7 @@ class TabsPage extends StatelessWidget {
               ),
             ),
           ),
-        )
-        //const AppBarHome(),
-        );
+        ));
   }
 }
 
@@ -86,6 +84,10 @@ class _Navigation extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final navigationModel = Provider.of<_NavigationModel>(context);
+
+    final activitieService = Provider.of<ActivitiesService>(context);
+
+    String dropdownValue = 'Actividad';
 
     return BottomNavigationBar(
         currentIndex: navigationModel.currentPage,
@@ -97,9 +99,53 @@ class _Navigation extends StatelessWidget {
           BottomNavigationBarItem(
               icon: FloatingActionButton(
                 backgroundColor: const Color(0xFF115DA9),
-                onPressed: () {
-                  navigationModel.currentPage = 2;
-                  log((navigationModel.currentPage).toString());
+                onPressed: () async {
+                  await showDialog(
+                    context: context,
+                    builder: (context) => AlertDialog(
+                      title: const Text('Opciones a agregar'),
+                      content: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: DropdownButton<String>(
+                          value: dropdownValue,
+                          icon: const Icon(Icons.arrow_downward),
+                          elevation: 16,
+                          style: const TextStyle(color: Color(0xEF007CFF)),
+                          underline: Container(
+                            height: 2,
+                            color: const Color(0xEF007CFF),
+                          ),
+                          onChanged: (String? value) => dropdownValue = value!,
+                          items: activitieService.listtype
+                              .map<DropdownMenuItem<String>>((String value) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: Text(value),
+                            );
+                          }).toList(),
+                        ),
+                      ),
+                      actions: <Widget>[
+                        ElevatedButton(
+                          onPressed: () {
+                            Navigator.of(context, rootNavigator: true)
+                                .pop(false);
+                          },
+                          child: const Text('Cancelar'),
+                        ),
+                        ElevatedButton(
+                          onPressed: () {
+                            Navigator.of(context, rootNavigator: true)
+                                .pop(true);
+
+                            navigationModel.currentPage = 2;
+                            // dismisses only the dialog and returns true
+                          },
+                          child: const Text('Continuar'),
+                        ),
+                      ],
+                    ),
+                  );
                 },
                 tooltip: 'Agregar',
                 elevation: 4.0,
