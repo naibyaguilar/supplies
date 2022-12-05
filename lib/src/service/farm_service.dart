@@ -10,7 +10,6 @@ class FarmService extends ChangeNotifier {
   final String _baseUrl = 'suppliesfarm.azurewebsites.net';
   final storage = const FlutterSecureStorage();
 
-  final List<Farm> farms = [];
   late Farm selectedfarm;
 
   List<String> listtype = <String>[
@@ -32,6 +31,7 @@ class FarmService extends ChangeNotifier {
   }
 
   Future<List<Farm>> LoadFarm() async {
+    final List<Farm> farms = [];
     try {
       isLoading = true;
 
@@ -53,13 +53,36 @@ class FarmService extends ChangeNotifier {
     }
   }
 
-  Future saveOrCreateFarm(Farm farm) async {
+  Future<List<Farm>> LoadFarmEmployee() async {
+    final List<Farm> farms = [];
+    try {
+      isLoading = true;
+
+      final url = Uri.http(_baseUrl, '/api/supplies/farm',
+          {'key': 'Content-Type', 'value': 'application/json'});
+      final resp = await http.get(url);
+
+      final decodedResp = json.decode(resp.body);
+      for (var i in decodedResp) {
+        final temp = Farm.fromMap(i);
+        farms.add(temp);
+      }
+      isLoading = false;
+      notifyListeners();
+
+      return farms;
+    } catch (e) {
+      return farms;
+    }
+  }
+
+  Future saveOrCreateFarm(Farm farm, List<Buildings> buildings) async {
     isSaving = true;
     notifyListeners();
 
     if (farm.id == null) {
       // Es necesario crear
-      await this.createFarm(farm);
+      await this.createFarm(farm, buildings);
     } else {
       // Actualizar
       await this.updateFarm(farm);
@@ -70,19 +93,20 @@ class FarmService extends ChangeNotifier {
   }
 
   Future<int?> updateFarm(Farm farm) async {
+    //  final List<Farm> farms = [];
     final url = Uri.http(_baseUrl, '/api/supplies/');
     final headers = {HttpHeaders.contentTypeHeader: 'application/json'};
 
     final resp = await http.put(url, headers: headers, body: farm.toJson());
     final decodedData = resp.body;
 
-    final index = this.farms.indexWhere((element) => element.id == farm.id);
-    this.farms[index] = farm;
+    // final index = this.farms.indexWhere((element) => element.id == farm.id);
+    // this.farms[index] = farm;
 
     return farm.id!;
   }
 
-  Future<int?> createFarm(Farm farm) async {
+  Future<int?> createFarm(Farm farm, List<Buildings> buildings) async {
     final Map<String, dynamic> farmData = {
       "table": "farm",
       "values": [
@@ -97,6 +121,7 @@ class FarmService extends ChangeNotifier {
         }
       ]
     };
+    final List<Farm> farms = [];
 
     final url = Uri.http(_baseUrl, '/api/supplies/');
     final headers = {HttpHeaders.contentTypeHeader: 'application/json'};
@@ -106,9 +131,50 @@ class FarmService extends ChangeNotifier {
     final decodedData = json.decode(resp.body);
 
     farm.id = decodedData['insertId'];
+    for (var i in buildings) {
+      createBuildings(i, decodedData['insertId']);
+    }
 
-    this.farms.add(farm);
+    farms.add(farm);
 
     return farm.id;
+  }
+
+  Future createBuildings(Buildings buildings, int id) async {
+    final Map<String, dynamic> buildingData = {
+      "table": "buildings",
+      "values": [
+        {
+          "funtion": buildings.funtion,
+          "area": buildings.area,
+          "latitude": 20.885680,
+          "longitude": -89.652740,
+          "farm_id": id
+        }
+      ]
+    };
+
+    final url = Uri.http(_baseUrl, '/api/supplies/');
+    final headers = {HttpHeaders.contentTypeHeader: 'application/json'};
+    final resp =
+        await http.post(url, headers: headers, body: json.encode(buildingData));
+    final decodedData = json.decode(resp.body);
+
+    buildings.id = decodedData['insertId'];
+
+    return null;
+  }
+
+  Future<int?> daleteFarm(Farm farm) async {
+    final url = Uri.http(_baseUrl, '/api/supplies');
+    final headers = {HttpHeaders.contentTypeHeader: 'application/json'};
+    final resp =
+        await http.delete(url, headers: headers, body: farm.toMapDelete());
+    final decodedData = resp.body;
+    if (decodedData.isNotEmpty) {
+      return null;
+    } else {
+      return 1;
+    }
   }
 }

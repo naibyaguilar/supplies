@@ -44,9 +44,8 @@ class MyApp extends StatelessWidget {
           'checking', // CAMBIAR A LOGIN Y ELIMINTAR EL CAMBIO EN EL AUTH
       routes: {
         'checking': (_) => CheckAuthScreen(),
-        'home': (_) => TabsPage(),
+        'home': (_) => const TabsPage(),
         'profile': (_) => const ProfileScreen(),
-        'assingId': (_) => const AssignScreen(),
         'farm': (_) => const FarmScreen(),
         'login': (_) => const LoginScreen(),
         'register': (_) => const RegisterScreen(),

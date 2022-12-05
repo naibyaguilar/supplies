@@ -54,6 +54,14 @@ class Farm {
         "created_at": createdAt,
         "admin_id": adminId,
       };
+  Map<String, dynamic> toMapDelete() => {
+        "table": "farm",
+        "values": [
+          {
+            "id": id,
+          }
+        ]
+      };
 }
 
 class Employees {

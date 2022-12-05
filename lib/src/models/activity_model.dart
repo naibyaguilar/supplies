@@ -1,50 +1,59 @@
+// To parse this JSON data, do
+//
+//     final activities = activitiesFromMap(jsonString);
+
 import 'dart:convert';
-import 'package:intl/intl.dart';
 
 class Activities {
   Activities({
-    this.id,
-    required this.farmId,
+    this.idFarm,
+    this.nameFarm,
+    this.idActivitie,
     required this.addBy,
     required this.createdAt,
-    required this.name,
+    required this.nameActivitie,
     required this.description,
-    this.note,
+    required this.note,
     required this.executionDate,
     required this.redo,
-    this.period,
-    required this.employeeName,
-    this.directedTo,
-    this.type,
+    required this.period,
+    this.employeeName,
+    this.employeeId,
+    required this.directedTo,
+    required this.type,
     required this.active,
   });
 
-  int? id;
-  int farmId;
+  int? idFarm;
+  String? nameFarm;
+  int? idActivitie;
   int addBy;
   DateTime createdAt;
-  String name;
+  String nameActivitie;
   String description;
-  String? note;
+  String note;
   DateTime executionDate;
   int redo;
-  int? period;
-  String employeeName;
-  int? directedTo;
-  String? type;
+  int period;
+  String? employeeName;
+  int? employeeId;
+  int directedTo;
+  String type;
   int active;
 
   factory Activities.fromJson(String str) =>
       Activities.fromMap(json.decode(str));
 
   String toJson() => json.encode(toMap());
+  String toJsoUpdaten() => json.encode(toMapUpdate());
 
-  factory Activities.fromMap(dynamic json) => Activities(
-        id: json["id_activitie"],
-        farmId: json["id_farm"],
+  factory Activities.fromMap(Map<String, dynamic> json) => Activities(
+        idFarm: json["id_farm"],
+        nameFarm: json["name_farm"],
+        idActivitie: json["id_activitie"],
         addBy: json["add_by"],
         createdAt: DateTime.parse(json["created_at"]),
-        name: json["name_farm"],
+        nameActivitie: json["name_activitie"],
         description: json["description"],
         note: json["note"],
         executionDate: DateTime.parse(json["execution_date"]),
@@ -55,38 +64,48 @@ class Activities {
         type: json["type"],
         active: json["active"],
       );
+  factory Activities.fromMapMyActivitie(Map<String, dynamic> json) =>
+      Activities(
+        idActivitie: json["id"],
+        idFarm: json["farm_id"],
+        addBy: json["add_by"],
+        createdAt: DateTime.parse(json["created_at"]),
+        nameActivitie: json["name"],
+        description: json["description"],
+        note: json["note"],
+        executionDate: DateTime.parse(json["execution_date"]),
+        redo: json["redo"],
+        period: json["period"],
+        employeeId: json["employee_id"],
+        directedTo: json["directedTo"],
+        type: json["type"],
+        active: json["active"],
+      );
 
   Map<String, dynamic> toMap() => {
-        "id": id,
-        "farm_id": farmId,
+        "id_farm": idFarm,
+        "name_farm": nameFarm,
+        "id_activitie": idActivitie,
         "add_by": addBy,
         "created_at": createdAt.toIso8601String(),
-        "name": name,
+        "name_activitie": nameActivitie,
         "description": description,
         "note": note,
         "execution_date": executionDate.toIso8601String(),
         "redo": redo,
         "period": period,
-        "employee_id": employeeName,
+        "employee_name": employeeName,
         "directedTo": directedTo,
         "type": type,
         "active": active,
       };
-
-  sDateTimeFormatInfo() {
-    return DateFormat.yMMMMEEEEd().add_jms().format(this.executionDate);
-  }
-
-  sType() {
-    switch (this.type) {
-      case 'group':
-        return 'Animales';
-      case 'consumables':
-        return 'Insumos';
-      case 'buildings':
-        return 'Estructuras';
-      default:
-        return 'Pendientes';
-    }
-  }
+  Map<String, dynamic> toMapUpdate() => {
+        "table": "activities",
+        "values": [
+          {
+            "id": idActivitie,
+            "active": active,
+          }
+        ]
+      };
 }

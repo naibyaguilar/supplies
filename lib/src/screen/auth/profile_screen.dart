@@ -201,7 +201,7 @@ Card _getFarms(Size screenSize, BuildContext context, Farm myfarm) {
             context,
             MaterialPageRoute(
                 builder: (context) => FarmAdminScreen(
-                      idfarm: myfarm.id,
+                      farm: myfarm,
                     ))),
       ),
     ),
