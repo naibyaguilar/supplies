@@ -11,8 +11,7 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var screenSize = MediaQuery.of(context).size;
-    return SingleChildScrollView(
-      scrollDirection: Axis.vertical,
+    return Padding(
       padding: EdgeInsets.only(top: screenSize.height * 0.22),
       child: Column(
         children: [
@@ -22,7 +21,7 @@ class HomeScreen extends StatelessWidget {
           ),
           SizedBox(
             width: screenSize.width,
-            height: screenSize.height * 0.25,
+            height: screenSize.height * 0.30,
             child: FutureBuilder(
                 future:
                     Provider.of<ActivitiesService>(context).LoadMyActivities(),
@@ -34,6 +33,7 @@ class HomeScreen extends StatelessWidget {
                       itemBuilder: (BuildContext context, int index) =>
                           TaskCard(
                             activity: snapshot.data![index]!,
+                            color: false,
                           ));
                 }),
           ),
@@ -44,7 +44,7 @@ class HomeScreen extends StatelessWidget {
           ),
           SizedBox(
             width: screenSize.width,
-            height: screenSize.height * 0.25,
+            height: screenSize.height * 0.32,
             child: FutureBuilder(
                 future: Provider.of<ActivitiesService>(context)
                     .LoadActivitiesbyFarmAdmin(),
@@ -56,6 +56,7 @@ class HomeScreen extends StatelessWidget {
                       itemBuilder: (BuildContext context, int index) =>
                           TaskCard(
                             activity: snapshot.data![index]!,
+                            color: true,
                           ));
                 }),
           ),

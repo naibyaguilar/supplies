@@ -10,7 +10,7 @@ class Activities {
     this.nameFarm,
     this.idActivitie,
     required this.addBy,
-    required this.createdAt,
+    this.createdAt,
     required this.nameActivitie,
     required this.description,
     required this.note,
@@ -28,7 +28,7 @@ class Activities {
   String? nameFarm;
   int? idActivitie;
   int addBy;
-  DateTime createdAt;
+  DateTime? createdAt;
   String nameActivitie;
   String description;
   String note;
@@ -52,7 +52,6 @@ class Activities {
         nameFarm: json["name_farm"],
         idActivitie: json["id_activitie"],
         addBy: json["add_by"],
-        createdAt: DateTime.parse(json["created_at"]),
         nameActivitie: json["name_activitie"],
         description: json["description"],
         note: json["note"],
@@ -87,7 +86,6 @@ class Activities {
         "name_farm": nameFarm,
         "id_activitie": idActivitie,
         "add_by": addBy,
-        "created_at": createdAt.toIso8601String(),
         "name_activitie": nameActivitie,
         "description": description,
         "note": note,

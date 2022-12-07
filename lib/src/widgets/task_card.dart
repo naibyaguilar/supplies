@@ -5,8 +5,10 @@ import '../screen/screens.dart';
 
 class TaskCard extends StatelessWidget {
   final Activities activity;
+  final bool color;
 
-  const TaskCard({Key? key, required this.activity}) : super(key: key);
+  const TaskCard({Key? key, required this.activity, required this.color})
+      : super(key: key);
   @override
   Widget build(BuildContext context) {
     return InkWell(
@@ -21,7 +23,9 @@ class TaskCard extends StatelessWidget {
           margin: const EdgeInsets.only(bottom: 30),
           width: double.infinity,
           height: 180,
-          decoration: _cardBorders(),
+          decoration: (color)
+              ? _cardBorders(const Color(0XffB2E9A4))
+              : _cardBorders(const Color(0xFFA4BFE9)),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -102,8 +106,8 @@ class TaskCard extends StatelessWidget {
     );
   }
 
-  BoxDecoration _cardBorders() => BoxDecoration(
-          color: const Color(0XffB2E9A4),
+  BoxDecoration _cardBorders(Color colorCard) => BoxDecoration(
+          color: colorCard, //Color(0XffB2E9A4),
           borderRadius: BorderRadius.circular(25),
           // ignore: prefer_const_literals_to_create_immutables
           boxShadow: [

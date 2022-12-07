@@ -14,25 +14,17 @@ class FarmFormProvider extends ChangeNotifier {
     Buildings(funtion: 'funtion', area: 0),
     Buildings(funtion: 'funtion', area: 0),
   ];
-  bool _isLoading = false;
-  int _currentValue = 1;
+
   String _dropdownValue = 'Agricola';
-
-  // List<Buildings> get building => _building;
-  bool get isLoading => _isLoading;
-  int get currentValue => _currentValue;
   String get dropdownValue => _dropdownValue;
-
-  set currentValue(int value) {
-    _currentValue = value;
-    notifyListeners();
-  }
 
   set dropdownValue(String value) {
     _dropdownValue = value;
     notifyListeners();
   }
 
+  bool _isLoading = false;
+  bool get isLoading => _isLoading;
   set isLoading(bool value) {
     _isLoading = value;
     notifyListeners();

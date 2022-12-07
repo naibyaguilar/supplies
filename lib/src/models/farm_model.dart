@@ -42,6 +42,17 @@ class Farm {
         createdAt: DateTime.parse(json["created_at"]),
         adminId: json["admin_id"],
       );
+  factory Farm.fromEmployeeMap(dynamic json) => Farm(
+        id: json["id_farm"],
+        name: json["name_farm"],
+        area: json["area"].toDouble(),
+        address: json["address"],
+        latitude: json["latitude"],
+        longitude: json["longitude"],
+        type: json["type"],
+        createdAt: DateTime.parse(json["created_at"]),
+        adminId: 1,
+      );
 
   Map<String, dynamic> toMap() => {
         "id": id,
@@ -66,28 +77,24 @@ class Farm {
 
 class Employees {
   Employees({
-    this.id,
-    required this.farmId,
-    required this.employeeId,
+    this.idPerson,
+    this.nombrePersona,
   });
 
-  int? id;
-  int farmId;
-  int employeeId;
+  int? idPerson;
+  String? nombrePersona;
 
   factory Employees.fromJson(String str) => Employees.fromMap(json.decode(str));
 
   String toJson() => json.encode(toMap());
 
   factory Employees.fromMap(Map<String, dynamic> json) => Employees(
-        id: json["id"],
-        farmId: json["farm_id"],
-        employeeId: json["employee_id"],
+        idPerson: json["id_person"],
+        nombrePersona: json["nombre_persona"],
       );
 
   Map<String, dynamic> toMap() => {
-        "id": id,
-        "farm_id": farmId,
-        "employee_id": employeeId,
+        "id_person": idPerson,
+        "nombre_persona": nombrePersona,
       };
 }

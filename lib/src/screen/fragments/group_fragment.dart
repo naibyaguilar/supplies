@@ -17,13 +17,13 @@ class GroupsScreen extends StatelessWidget {
       width: screenSize.width,
       height: screenSize.height * 0.80,
       child: FutureBuilder(
-          future: Provider.of<FarmService>(context).LoadFarm(),
-          builder: (BuildContext context, AsyncSnapshot<List<Farm?>> snapshot) {
+          future: Provider.of<FarmService>(context).LoadFarmEmployee(),
+          builder: (BuildContext context, AsyncSnapshot<List<Farm>> snapshot) {
             if (!snapshot.hasData) return const LoadingScreen();
             return ListView.builder(
                 itemCount: snapshot.data?.length,
                 itemBuilder: (BuildContext context, int index) => FarmCard(
-                      farm: snapshot.data![index]!,
+                      farm: snapshot.data![index],
                     ));
           }),
     );

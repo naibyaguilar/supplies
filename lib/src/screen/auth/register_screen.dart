@@ -129,7 +129,7 @@ class _RegisterFormState extends State<_RegisterForm> {
               keyboardType: TextInputType.datetime,
               decoration: const InputDecoration(
                   icon: Icon(Icons.calendar_today),
-                  labelText: "Selecciona una fecha"),
+                  labelText: "Selecciona tu fecha de nacimientoi"),
               onTap: () async {
                 DatePicker();
                 DateTime? pickedDate = await showDatePicker(
@@ -146,7 +146,7 @@ class _RegisterFormState extends State<_RegisterForm> {
                   });
                 } else {
                   NotificationsService.showSnackbar(
-                      "Date is not selected", context);
+                      "Fecha no seleccionada", context);
                 }
               },
               onChanged: (value) => registerForm.birthday = dateController.text,
