@@ -54,26 +54,24 @@ class FarmService extends ChangeNotifier {
   }
 
   Future<List<Farm>> LoadFarmEmployee() async {
+    final Map<String, dynamic> myFData = {
+      "idperson": await storage.read(key: 'id')
+    };
     final List<Farm> farms = [];
-    try {
-      isLoading = true;
 
-      final url = Uri.http(_baseUrl, '/api/supplies/farm',
-          {'key': 'Content-Type', 'value': 'application/json'});
-      final resp = await http.get(url);
+    final url = Uri.http(_baseUrl, '/api/supplies/getfarmsbyEmployes');
+    final headers = {HttpHeaders.contentTypeHeader: 'application/json'};
+    final resp =
+        await http.post(url, headers: headers, body: json.encode(myFData));
 
-      final decodedResp = json.decode(resp.body);
-      for (var i in decodedResp) {
-        final temp = Farm.fromMap(i);
-        farms.add(temp);
-      }
-      isLoading = false;
-      notifyListeners();
-
-      return farms;
-    } catch (e) {
-      return farms;
+    final decodedResp = json.decode(resp.body);
+    for (var i in decodedResp) {
+      final temp = Farm.fromEmployeeMap(i);
+      farms.add(temp);
     }
+    notifyListeners();
+
+    return farms;
   }
 
   Future saveOrCreateFarm(Farm farm, List<Buildings> buildings) async {
@@ -169,7 +167,7 @@ class FarmService extends ChangeNotifier {
     final url = Uri.http(_baseUrl, '/api/supplies');
     final headers = {HttpHeaders.contentTypeHeader: 'application/json'};
     final resp =
-        await http.delete(url, headers: headers, body: farm.toMapDelete());
+        await http.post(url, headers: headers, body: farm.toMapDelete());
     final decodedData = resp.body;
     if (decodedData.isNotEmpty) {
       return null;

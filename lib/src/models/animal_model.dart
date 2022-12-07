@@ -17,7 +17,7 @@ class Animals {
   int addBy;
   int farmId;
   DateTime birthday;
-  int breed;
+  String breed;
   double weight;
 
   factory Animals.fromJson(String str) => Animals.fromMap(json.decode(str));

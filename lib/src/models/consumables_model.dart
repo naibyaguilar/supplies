@@ -5,7 +5,7 @@ class Consumables {
     this.id,
     required this.farmId,
     required this.addBy,
-    required this.createdAt,
+    this.createdAt,
     required this.name,
     required this.type,
     required this.quantity,
@@ -16,7 +16,7 @@ class Consumables {
   int? id;
   int farmId;
   int addBy;
-  DateTime createdAt;
+  DateTime? createdAt;
   String name;
   dynamic type;
   int quantity;
@@ -44,7 +44,6 @@ class Consumables {
         "id": id,
         "farm_id": farmId,
         "add_by": addBy,
-        "created_at": createdAt.toIso8601String(),
         "name": name,
         "type": type,
         "quantity": quantity,

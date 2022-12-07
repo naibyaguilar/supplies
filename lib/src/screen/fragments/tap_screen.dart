@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:supplies/src/screen/screens.dart';
 import 'package:supplies/src/widgets/widgets.dart';
 
+import '../../providers/providers.dart';
 import '../../service/service.dart';
 
 class TabsPage extends StatelessWidget {
@@ -84,10 +85,7 @@ class _Navigation extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final navigationModel = Provider.of<_NavigationModel>(context);
-
     final activitieService = Provider.of<ActivitiesService>(context);
-
-    String dropdownValue = 'Actividad';
 
     return BottomNavigationBar(
         currentIndex: navigationModel.currentPage,
@@ -107,7 +105,7 @@ class _Navigation extends StatelessWidget {
                       content: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: DropdownButton<String>(
-                          value: dropdownValue,
+                          value: navigationModel.dropdownValue,
                           icon: const Icon(Icons.arrow_downward),
                           elevation: 16,
                           style: const TextStyle(color: Color(0xEF007CFF)),
@@ -115,7 +113,11 @@ class _Navigation extends StatelessWidget {
                             height: 2,
                             color: const Color(0xEF007CFF),
                           ),
-                          onChanged: (String? value) => dropdownValue = value!,
+                          onChanged: (String? value) {
+                            navigationModel.dropdownValue = value!;
+                            Navigator.of(context, rootNavigator: true)
+                                .pop(true);
+                          },
                           items: activitieService.listtype
                               .map<DropdownMenuItem<String>>((String value) {
                             return DropdownMenuItem<String>(
@@ -132,16 +134,6 @@ class _Navigation extends StatelessWidget {
                                 .pop(false);
                           },
                           child: const Text('Cancelar'),
-                        ),
-                        ElevatedButton(
-                          onPressed: () {
-                            Navigator.of(context, rootNavigator: true)
-                                .pop(true);
-
-                            navigationModel.currentPage = 2;
-                            // dismisses only the dialog and returns true
-                          },
-                          child: const Text('Continuar'),
                         ),
                       ],
                     ),
@@ -177,9 +169,11 @@ class _Paginas extends StatelessWidget {
       controller: navigationModel.pageController,
       physics: const NeverScrollableScrollPhysics(),
       children: <Widget>[
-        HomeScreen(),
+        const HomeScreen(),
         const ListScreen(),
-        Container(),
+        CreationScreen(
+          initialForm: navigationModel._dropdownValue,
+        ),
         const GroupsScreen(),
         const SettingsScreens()
       ],
@@ -195,11 +189,20 @@ class _NavigationModel with ChangeNotifier {
 
   set currentPage(int value) {
     _currentPage = value;
-    print(_currentPage);
 
     _pageController.animateToPage(value,
-        duration: const Duration(milliseconds: 250), curve: Curves.easeOut);
+        duration: const Duration(milliseconds: 250),
+        curve: Curves.linearToEaseOut);
 
+    notifyListeners();
+  }
+
+  String _dropdownValue = 'Actividad';
+  String get dropdownValue => _dropdownValue;
+
+  set dropdownValue(String value) {
+    _dropdownValue = value;
+    currentPage = 2;
     notifyListeners();
   }
 
